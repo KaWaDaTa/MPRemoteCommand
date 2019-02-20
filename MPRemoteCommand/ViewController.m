@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MPNowPlayingInfoCenter.h>
 
 @interface ViewController ()<AVAudioPlayerDelegate>
 @property (nonatomic, strong) AVAudioPlayer * player;
@@ -40,6 +41,14 @@
     [self.player setNumberOfLoops:-1];
     [self.player setVolume:1];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+
+    [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = @{
+                                                              MPMediaItemPropertyArtist: @"MPMediaItemPropertyArtist",
+
+                                                              MPMediaItemPropertyTitle: @"MPMediaItemPropertyTitleMPMediaItemPropertyTitleMPMediaItemPropertyTitle",
+                                                              MPMediaItemPropertyPlaybackDuration: [NSNumber numberWithFloat:41],
+                                                              MPMediaItemPropertyAlbumTitle: @"MPMediaItemPropertyAlbumTitle"
+                                                              };
     
     self.mprcNext = [MPRemoteCommandCenter sharedCommandCenter].nextTrackCommand;
     [self.mprcNext addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent *event) {
@@ -93,6 +102,11 @@
     [self.mpfbBookMark setLocalizedTitle:@"书签"];
     [self.mpfbBookMark setLocalizedShortTitle:@"书签"];
     self.bookmark = NO;
+
+//    //拖动进度条
+//    [[MPRemoteCommandCenter sharedCommandCenter].changePlaybackPositionCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+//        return MPRemoteCommandHandlerStatusSuccess;
+//    }];
 }
 
 - (void)bookmarkCommand:(MPFeedbackCommandEvent *)sender
